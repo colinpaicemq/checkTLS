@@ -1,0 +1,118 @@
+package sslJava;
+
+
+
+//~/eclipse-workspace-C/sslJava/bin$ java -cp . sslJava/Seer  -Djavax.net.debug=ssl:handshake
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+//import javax.net.ssl.SSLSocket;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.Provider;
+import java.security.PublicKey;
+import java.security.Security;
+import java.security.Signature;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Base64;
+ 
+import java.util.Enumeration;
+ 
+import sunpkcs11;
+
+
+public class Nssdb {
+public static void main(String args[]) {
+	//	parameters data = new parameters();
+
+	// Date d = new Date();
+	Nssdb  start = new Nssdb();
+	start.dowork(args);
+	return ;
+}
+@SuppressWarnings("restriction")
+public void dowork(String args[])  {
+	 
+	 String configName = "/home/colinpaice/ssl/ssl2/pkcs11.config";   
+  // Java 8
+  //    sun.security.pkcs11.SunPKCS11 provider = new sun.security.pkcs11.SunPKCS11(configName);
+   //   Security.addProvider(provider);
+//      
+      // Java 11
+	// Provider p = new sun.security.pkcs11.SunPKCS11(configName);
+	// Security.addProvider(p);
+	 char[] password = "".toCharArray();
+	 Provider p = new sun.security.pkcs11.SunPKCS11(configName); 
+   Security.addProvider(p);
+   KeyStore ks = null;
+	try {
+		ks = KeyStore.getInstance("PKCS11", p);
+		for (Enumeration<String> aliases = ks.aliases(); aliases.hasMoreElements();){
+      System.out.println(aliases.nextElement());
+ }
+	} catch (KeyStoreException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} //p is the provider created above
+   try {
+		ks.load(null, password);
+	} catch (NoSuchAlgorithmException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (CertificateException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+   
+	//    Provider prototype = Security.getProvider("SunPKCS11");
+  //    Provider provider = prototype.  configure(configName);
+      
+
+   //   KeyStore ks = KeyStore.getInstance("PKCS11", provider);
+//      ks.load(null, password);
+//      System.out.println("Successfully loaded NSS DB.");
+//      System.out.println("------------------------------");
+//      for (Enumeration<String> aliases = ks.aliases(); aliases.hasMoreElements();) {
+//          String alias = aliases.nextElement();
+//          X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
+//          PublicKey publicKey = cert.getPublicKey();
+//          PrivateKey privateKey = (PrivateKey) ks.getKey(alias, password);
+//          System.out.println("alias: " + alias);
+//          System.out.println("privateKey: " + privateKey);
+//          System.out.println("cert subject dn: " + cert.getSubjectX500Principal().toString());
+//
+//          if (privateKey != null) {
+//              String plainText = "HELLO WORLD";
+//
+//              Signature privateSignature = Signature.getInstance("SHA256withRSA", provider);
+//              privateSignature.initSign(privateKey);
+//              privateSignature.update(plainText.getBytes(UTF_8));
+//              byte[] signature = privateSignature.sign();
+//              String signatureBase64 = Base64.getEncoder().encodeToString(signature);
+//              System.out.println(signatureBase64);
+//
+//              Signature publicSignature = Signature.getInstance("SHA256withRSA", provider);
+//              publicSignature.initVerify(publicKey);
+//              publicSignature.update(plainText.getBytes(UTF_8));
+//              boolean verify = publicSignature.verify(signature);
+//              System.out.println("verify: " + verify);
+//          }
+//
+//          System.out.println("------------------------------");
+//      }
+}
+}
+
