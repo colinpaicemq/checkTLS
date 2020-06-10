@@ -64,6 +64,7 @@ public class CheckCert {
 		Set<String> dontDump = new HashSet<>(Arrays.asList(
 					"EXPIRED","NOT_YET_VALID"
 				)); 
+		
 
 		boolean value = true;
 		try {
