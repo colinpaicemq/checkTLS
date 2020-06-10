@@ -1,0 +1,5 @@
+/usr/lib/jvm/java-11-openjdk-amd64/bin/java   -Djavax.net.debug=ssl:handshake -DpropertyFile="server.properties" -Dfile.encoding=UTF-8 -classpath /home/colinpaice/eclipse-workspace-C/sslJava/bin sslJava.Server
+
+exit
+
+ -Djavax.net.debug=ssl:handshake -DcheckKS -DcheckTS -Dport=8443 -Djava.security.debug=none -Djava.security.properties=/home/colinpaice/eclipse-workspace-C/sslJava/bin/serverdisabled.properties -Djavax.net.ssl.keyStore=/home/colinpaice/ssl/ssl2/mqweb.p12 -Djavax.net.ssl.keyStorePassword=password -Djavax.net.ssl.keyStoreType=pkcs12 -Djavax.net.ssl.trustStore=/home/colinpaice/ssl/ssl2/trust.jks -Djavax.net.ssl.trustStorePassword=zpassword -Djavax.net.ssl.trustStoreType=jks -Dzjdk.tls.client.protocols=TLSv1.2 -D3jdk.tls.client.cipherSuites=TLS_AES_256_GCM_SHA384 -Dzjdk.tls.client.cipherSuites=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 -Dzjdk.tls.server.cipherSuites=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 -Dfile.encoding=UTF-8 -classpath /home/colinpaice/eclipse-workspace-C/sslJava/bin sslJava.Server
