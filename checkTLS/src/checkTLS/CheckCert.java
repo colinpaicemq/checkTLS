@@ -65,7 +65,6 @@ public class CheckCert {
 					"EXPIRED","NOT_YET_VALID"
 				)); 
 
-
 		boolean value = true;
 		try {
 			/*
