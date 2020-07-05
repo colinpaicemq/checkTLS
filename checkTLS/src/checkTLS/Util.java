@@ -31,7 +31,7 @@ package checkTLS;
  */
 
 import java.io.IOException;
-
+import java.security.Principal;
 import java.security.PublicKey;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
@@ -294,8 +294,14 @@ public class Util {
 				}
 				printSupportedSignatureAlgorithms(ss);
 				value += vp.print("");
-				value += vp.print( " %-20s %-20s","peerPrincipal:" ,ss.getPeerPrincipal().toString() );
-				value += vp.print( " %-20s %-20s","clientPrincipal:" ,ss.getLocalPrincipal().toString()  );
+				Principal p = ss.getPeerPrincipal();  
+				if (p != null) 	
+				 			value += vp.print( " %-20s %-20s","peerPrincipal:" ,ss.getPeerPrincipal().toString() );
+				else  value += vp.print( " %-20s %-20s","peerPrincipal:" ,"Not found");
+				p = ss.getLocalPrincipal();
+				if (p != null) 	
+				  value += vp.print( " %-20s %-20s","clientPrincipal:" ,ss.getLocalPrincipal().toString()  );
+				else  value += vp.print( " %-20s %-20s","clientPrincipal:" ,"Not found");
 				value += vp.print( " %-20s %-20s","cipherSuite used:" ,ss.getCipherSuite()    );
 				value += vp.print( " %-20s %-20s ","peer host:" ,ss.getPeerHost()  );
 				;
@@ -345,6 +351,10 @@ public class Util {
 			int sizeLocal  = localSupportedSignatureAlgorithms.size();
 			String peer = "peer " + peerSupportedSignatureAlgorithms.size();
 			String local = "local " + localSupportedSignatureAlgorithms.size();
+			if (peerSupportedSignatureAlgorithms.size()== 0 )
+			{
+			 vp.print("It looks like the remote end had a problem as it returned no signatures");
+			}
 			vp.print("Compare supported signature algorithms");
 			vp.print("  : %-20s %-20s",local,peer);
 			if (sizeLocal > 0 )
@@ -391,7 +401,7 @@ public class Util {
 	 * @param sl
 	 * @return
 	 */
-	public static int displayCipherSuites(String[] sl) {
+	public static int displayCipherSuites(String[] sl,Parameters params) {
 		if (sl.length > 0)
 		{
 			int others = 0; 
@@ -403,6 +413,7 @@ public class Util {
 			// then the ones which dont have "with"...
 			for (String s : sl )
 			{
+				if (params.printCipherSuites > 0)
 				System.out.println("  " +  s );
 				if (s.contains("_WITH_"))
 				{
@@ -463,7 +474,7 @@ public class Util {
 		if (pk instanceof RSAPublicKey) {
 			//final RSAPublicKey rsapub = (RSAPublicKey) pk;
 			//	String	answer = "RSA " + rsapub.getModulus().bitLength();
-			System.err.println("RSA" +pk.toString());
+	//		System.err.println("RSA" +pk.toString());
 		} else if (pk instanceof ECPublicKey) {
 			final ECPublicKey ecpriv = (ECPublicKey) pk;
 			final java.security.spec.ECParameterSpec spec = ecpriv.getParams();
@@ -471,7 +482,7 @@ public class Util {
 				// spec.toString is like sect409k1 [NIST K-409] (1.3.132.0.36)
 				String ecCurve[] = spec.toString().split(" ",2);
 				if (weakEC.contains(ecCurve[0]))
-					System.out.println(" !!Certificate is weak and may not be accepted:" + spec.toString() );
+					System.err.println(" !!Certificate is weak and may not be accepted:" + spec.toString() );
 				//				System.out.println("???+EC Certificate" + spec.toString());
 				//			System.out.println("???+EC Certificate" + spec.getCurve().toString());
 				//			answer = "EC " + spec.getOrder().bitLength(); // does this really return something we expect?
